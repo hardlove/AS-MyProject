@@ -24,7 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.target.ImageViewTarget;
-import com.globalroam.gruc.enterprise.R;
+import com.future.myproject.R;
 
 import cn.finalteam.galleryfinal.widget.GFImageView;
 

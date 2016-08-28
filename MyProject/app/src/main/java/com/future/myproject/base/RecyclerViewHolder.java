@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.globalroam.gruc.enterprise.utils.ImageUtils;
+import com.future.myproject.utils.ImageUtils;
+
 
 /**
  * Created by Administrator on 2016/7/7 0007.

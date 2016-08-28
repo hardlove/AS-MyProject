@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Chenlu on 2016/7/7 0007.
  */
-public abstract class BaseRecyclerAdapter<T,VH extends RecyclerViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class  BaseRecyclerAdapter<T,VH extends RecyclerViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected  List<T> mData;
     protected final Context mContext;

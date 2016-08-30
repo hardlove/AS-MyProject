@@ -123,9 +123,16 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public RecyclerViewHolder setItemOnClickListener(int viewId, View.OnClickListener listener) {
+    public RecyclerViewHolder setChildViewOnClickListener(int viewId, View.OnClickListener listener) {
         View view = findViewById(viewId);
         view.setOnClickListener(listener);
         return this;
     }
+
+    public RecyclerViewHolder setChildViewOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+        View view = findViewById(viewId);
+        view.setOnLongClickListener(listener);
+        return this;
+    }
+
 }

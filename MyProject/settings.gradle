@@ -1,1 +1,1 @@
-include ':app', ':map'
+include ':app', ':map', ':widgets_library'

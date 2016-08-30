@@ -7,13 +7,17 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -25,7 +29,7 @@ import java.util.List;
  * This utility class can add a horizontal popup-menu easily
  * 该工具类可以很方便的为View、ListView/GridView绑定长按弹出横向气泡菜单
  */
-public class PopupListMenu {
+public class PopupListMenu2 {
 
     private static final int DEFAULT_NORMAL_TEXT_COLOR = Color.WHITE;
     private static final int DEFAULT_PRESSED_TEXT_COLOR = Color.WHITE;
@@ -45,7 +49,7 @@ public class PopupListMenu {
     private View mContextView;
     private View mIndicatorView;
     private List<String> mPopupItemList;
-    private OnPopupMenuListClickListener mOnPopupMenuListClickListener;
+    private OnPopupListClickListener mOnPopupListClickListener;
     private int mContextPosition;
     private float mRawX;
     private float mRawY;
@@ -69,20 +73,9 @@ public class PopupListMenu {
     private int mDividerColor;
     private int mDividerWidthPixel;
     private int mDividerHeightPixel;
+    private GestureDetector mGestureDetector;
 
-
-    public PopupListMenu(Context mContext, View mAnchorView, List<String> mPopupItemList) {
-        this.mContext = mContext;
-        this.mAnchorView = mAnchorView;
-        this.mPopupItemList = mPopupItemList;
-        init(mContext,mAnchorView,mPopupItemList);
-    }
-
-    public void setOnPopupMenuListClickListener(OnPopupMenuListClickListener onPopupMenuListClickListener) {
-        this.mOnPopupMenuListClickListener = onPopupMenuListClickListener;
-    }
-
-    private void init(Context context, View anchorView, List<String> popupItemList) {
+    public void init(Context context, View anchorView, List<String> popupItemList, OnPopupListClickListener onPopupListClickListener) {
         this.mNormalTextColor = DEFAULT_NORMAL_TEXT_COLOR;
         this.mPressedTextColor = DEFAULT_PRESSED_TEXT_COLOR;
         this.mTextSizePixel = DEFAULT_TEXT_SIZE_PIXEL;
@@ -95,6 +88,7 @@ public class PopupListMenu {
         this.mContext = context;
         this.mAnchorView = anchorView;
         this.mPopupItemList = popupItemList;
+        this.mOnPopupListClickListener = onPopupListClickListener;
         this.mPopupWindow = null;
         mAnchorView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -104,7 +98,63 @@ public class PopupListMenu {
                 return false;
             }
         });
+        if (mAnchorView instanceof AbsListView) {
+            ((AbsListView) mAnchorView).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    mContextView = view;
+                    mContextPosition = position;
+                    showPopupListWindow();
+                    return true;
+                }
+            });
+        } else if (mAnchorView instanceof RecyclerView) {
 
+            mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+
+
+            ((RecyclerView)mAnchorView).addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                @Override
+                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                    Log.i(TAG, "onInterceptTouchEvent~~");
+                    View childView = rv.findChildViewUnder(e.getX(), e.getY());
+
+                    mContextView = childView;
+                    mContextPosition = rv.getChildAdapterPosition(childView);
+                    showPopupListWindow();
+                    return false;
+                }
+
+                @Override
+                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                    Log.i(TAG, "onTouchEvent~~");
+
+                }
+
+                @Override
+                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                    Log.i(TAG, "onRequestDisallowInterceptTouchEvent~~");
+                }
+            });
+
+
+
+
+        } else {
+            mAnchorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContextView = v;
+                    showPopupListWindow();
+                }
+            });
+        }
         if (mScreenWidth == 0) {
             mScreenWidth = getScreenWidth();
         }
@@ -114,15 +164,8 @@ public class PopupListMenu {
         refreshBackgroundOrRadiusStateList(mPressedBackgroundColor, mNormalBackgroundColor, mBackgroundCornerRadiusPixel);
         refreshTextColorStateList(mPressedTextColor, mNormalTextColor);
     }
-    public void hidePopupListWindow() {
-        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
-            return;
-        }
-        if (mPopupWindow != null && mPopupWindow.isShowing()) {
-            mPopupWindow.dismiss();
-        }
-    }
-    public void showPopupListWindow() {
+
+    private void showPopupListWindow() {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
@@ -164,12 +207,12 @@ public class PopupListMenu {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSizePixel);
                 textView.setPadding(dp2px(10), dp2px(9), dp2px(10), dp2px(9));
                 textView.setClickable(true);
-                final int position = i;
+                final int finalI = i;
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mOnPopupMenuListClickListener != null) {
-                            mOnPopupMenuListClickListener.onPopupListClick(position, mPopupItemList.get(position));
+                        if (mOnPopupListClickListener != null) {
+                            mOnPopupListClickListener.onPopupListClick(mContextView, mContextPosition, finalI);
                             hidePopupListWindow();
                         }
                         Log.i("PopupList", "setOnClickListener");
@@ -178,13 +221,17 @@ public class PopupListMenu {
                 textView.setText(mPopupItemList.get(i));
                 if (mPopupItemList.size() > 1 && i == 0) {
                     textView.setBackgroundDrawable(mLeftItemBackground);
+//                    textView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.popup_list_menu_left_item_bg));
 
                 } else if (mPopupItemList.size() > 1 && i == mPopupItemList.size() - 1) {
                     textView.setBackgroundDrawable(mRightItemBackground);
+//                    textView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.popup_list_menu_right_item_bg));
                 } else if (mPopupItemList.size() == 1) {
                     textView.setBackgroundDrawable(mCornerItemBackground);
+//                    textView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.popup_list_menu_center_item_bg));
                 } else {
                     textView.setBackgroundDrawable(mCenterItemBackground);
+//                    textView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.popup_list_menu_center_item_bg));
                 }
                 popupListContainer.addView(textView);
                 if (mPopupItemList.size() > 1 && i != mPopupItemList.size() - 1) {
@@ -349,6 +396,15 @@ public class PopupListMenu {
         return view.getMeasuredHeight();
     }
 
+    public void hidePopupListWindow() {
+        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
+            return;
+        }
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
+    }
+
     public View getIndicatorView() {
         return mIndicatorView;
     }
@@ -444,8 +500,8 @@ public class PopupListMenu {
         this.mDividerHeightPixel = dividerHeightPixel;
     }
 
-    public interface OnPopupMenuListClickListener {
-        void onPopupListClick(int menuPosition,String menuDes);
+    public interface OnPopupListClickListener {
+        void onPopupListClick(View contextView, int contextPosition, int position);
     }
 
 }

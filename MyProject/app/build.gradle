@@ -25,7 +25,7 @@ dependencies {
     //注意v7包默认包含了v4包，所以你不必再添加v4包的依赖申明
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.jakewharton:butterknife:7.0.0'
-    compile project(':map')
+//    compile project(':map')
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
     compile 'cn.finalteam:galleryfinal:1.4.8.4'

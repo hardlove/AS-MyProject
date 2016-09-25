@@ -6,13 +6,15 @@ import android.support.v4.app.FragmentTabHost;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
 import com.future.map.R;
 import com.future.map.base.BaseActivity;
+import com.future.map.gaode.utils.LocationClientManager;
 
 /**
  * Created by CL on 2016/8/27.
  */
-public class BaiduMapActivity extends BaseActivity {
+public class BaiduMapActivity extends BaseActivity implements LocationClientManager.OnLocationChangeCallBack{
 
     private static final String TAG = "BaiduMapActivity";
     private TextView mBack;
@@ -36,6 +38,7 @@ public class BaiduMapActivity extends BaseActivity {
         mTabHost.addTab(mTabHost.newTabSpec("办公楼").setIndicator("办公楼"), mFragment, bundle);
         mTabHost.addTab(mTabHost.newTabSpec("广场").setIndicator("广场"), mFragment, bundle);
 
+        LocationClientManager.getInstance(this).registerOnLocationChangeCallBack(this);
 
     }
 
@@ -48,4 +51,19 @@ public class BaiduMapActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void succeed(AMapLocation aMapLocation) {
+
+    }
+
+    @Override
+    public void failed(int errorCode, String errorInfo) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocationClientManager.getInstance(this).unRegisterOnLocationChangeCallBack(this);
+    }
 }

@@ -57,7 +57,6 @@ public class LocationClientManager implements AMapLocationListener{
 
     public interface OnLocationChangeCallBack{
         void succeed(AMapLocation aMapLocation);
-
         void failed(int errorCode, String errorInfo);
 
     }

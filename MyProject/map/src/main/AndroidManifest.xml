@@ -22,11 +22,7 @@
 
         <activity android:name=".baidu.ui.BaiduMapActivity" />
 
-        <!--gao de map-->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="e1b8ca3b29c89333778de6d66f5d62ef"/>
-        <service android:name="com.amap.api.location.APSService"></service>
+
 
     </application>
 

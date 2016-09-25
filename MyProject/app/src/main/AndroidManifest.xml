@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.future.myproject">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--gao de map-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="b98553d90b3e09a7aa9cccfe1fbfefb1"/>
+        <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
 </manifest>

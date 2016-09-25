@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.globalroam.gruc.enterprise.utils.Log;
-import com.globalroam.voip.api.MLoginApi;
 
 /**
  * Created by chenlu on 2016/8/5 0005.
@@ -24,8 +22,7 @@ public class ScreenActionReceiver extends BroadcastReceiver {
         } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
             Log.d(TAG, "screen off");
         } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
-            Log.d(TAG, "screen unlock . islogin:"+MLoginApi.isLogin());
-            MLoginApi.checkLoginStatus();
+
 
 
         }

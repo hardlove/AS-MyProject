@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.future.myproject"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -20,27 +20,30 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     //注意v7包默认包含了v4包，所以你不必再添加v4包的依赖申明
-    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.jakewharton:butterknife:7.0.0'
     compile project(':map')
 
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
-
+    //图片选择、编辑库
     compile 'cn.finalteam:galleryfinal:1.4.8.4'
-
+    //图片加载库
     compile 'com.github.bumptech.glide:glide:3.5.2'
-
+    //结合glide实现各种图片效果及毛玻璃效果
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //json解析库
     compile 'com.google.code.gson:gson:2.6.2'
-
+    //rx
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'com.trello:rxlifecycle-components:0.6.1'
-
+    //retrofit
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
 }

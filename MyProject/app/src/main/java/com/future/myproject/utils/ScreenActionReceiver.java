@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-
 /**
  * Created by chenlu on 2016/8/5 0005.
  */
@@ -22,7 +21,6 @@ public class ScreenActionReceiver extends BroadcastReceiver {
         } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
             Log.d(TAG, "screen off");
         } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
-
 
 
         }

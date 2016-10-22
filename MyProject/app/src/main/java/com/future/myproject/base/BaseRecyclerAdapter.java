@@ -19,7 +19,6 @@ public abstract class  BaseRecyclerAdapter<T,VH extends RecyclerViewHolder> exte
     protected LayoutInflater mInflater;
     protected OnItemClickListener mClickListener;
     private OnItemLongClickListener mLongClickListener;
-
     protected int firstVisibilityPosition;
     protected int lastVisibilityPosition;
 
